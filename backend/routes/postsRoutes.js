@@ -49,4 +49,20 @@ route.post('/', authenticateToken, async (req, res) => {
   res.status(201).json({ message: 'Post created', post });
 });
 
+route.delete('/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  const post = await prisma.post.findUnique({
+    where: { id },
+  });
+  const isAuthor = req.user.id === post.authorId;
+  if (isAuthor) {
+    await prisma.post.delete({
+      where: { id },
+    });
+    res.send('Delete successful');
+  } else {
+    res.send('Not authorized to delete that post');
+  }
+});
+
 module.exports = route;
