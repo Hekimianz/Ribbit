@@ -6,6 +6,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const postsRoutes = require('./routes/postsRoutes');
+const commentRoutes = require('./routes/commentsRoutes');
 const { authenticateToken } = require('./middlewares/auth');
 
 app.use(express.json());
@@ -14,6 +15,8 @@ app.use(cookieParser());
 
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
+app.use('/comments', commentRoutes);
+
 app.get('/', authenticateToken, (req, res) => {
   res.json({ user: req.user });
 });
