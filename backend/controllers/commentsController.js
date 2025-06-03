@@ -5,6 +5,12 @@ exports.getAll = async (req, res) => {
     where: {
       authorId: req.user.id,
     },
+    select: {
+      id: true,
+      text: true,
+      createdAt: true,
+      postId: true,
+    },
   });
   res.status(200).json({ comments });
 };
