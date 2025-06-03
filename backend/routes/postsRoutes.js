@@ -1,4 +1,3 @@
-const prisma = require('../config/prismaClient');
 const express = require('express');
 const route = express.Router();
 const postsController = require('../controllers/postsController');
