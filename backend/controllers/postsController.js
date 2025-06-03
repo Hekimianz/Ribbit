@@ -2,9 +2,23 @@ const prisma = require('../config/prismaClient');
 
 exports.getAll = async (req, res) => {
   const posts = await prisma.post.findMany({
-    include: {
-      subribbit: true,
-      author: true,
+    select: {
+      subribbit: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          username: true,
+        },
+      },
+      id: true,
+      createdAt: true,
+      title: true,
+      image: true,
     },
   });
   res.send(posts);
