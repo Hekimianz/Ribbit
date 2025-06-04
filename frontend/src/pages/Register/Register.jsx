@@ -2,13 +2,14 @@ import { useState } from 'react';
 import styles from './Register.module.css';
 import { Stack, Button } from '@mui/material';
 import { useNavigate } from 'react-router';
+const base_url = import.meta.env.VITE_API_URL;
 export default function Register() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const handleRegister = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:8000/auth/register', {
+    const response = await fetch(`${base_url}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
