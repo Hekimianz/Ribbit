@@ -1,37 +1,58 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router';
 import styles from '../Register/Register.module.css';
 import { Stack, Button } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../context/authContext';
-const base_url = import.meta.env.VITE_API_URL;
 export default function Login() {
   const navigate = useNavigate();
   const { user, login } = useAuth();
-  console.log(user);
-  console.log(login);
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    const response = await fetch(`${base_url}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    });
-    if (response.ok) {
+  const [invalid, setInvalid] = useState(true);
+  const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    if (!password || !username) {
+      setInvalid(true);
+    } else {
+      setInvalid(false);
+    }
+  }, [username, password]);
+
+  useEffect(() => {
+    if (user) {
       navigate('/');
     }
+  }, [user, navigate]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrors([]);
+    const errorMessage = await login(username, password);
+    if (errorMessage) {
+      console.log(errorMessage);
+      setErrors([errorMessage]);
+    } else {
+      navigate('/');
+    }
+    setLoading(false);
   };
+
   return (
     <div className="main-wrapper">
       <h1>Login</h1>
-      <form className={styles.form} method="POST" onSubmit={handleRegister}>
+      {loading && <div className={styles.loader}></div>}
+      {errors.length > 0 && (
+        <ul className={styles.errors}>
+          {errors.map((error) => {
+            return <li>{error}</li>;
+          })}
+        </ul>
+      )}
+      <form className={styles.form} method="POST" onSubmit={handleLogin}>
         <Stack spacing={1} direction="column">
           <label htmlFor="username">Username:</label>
           <input
@@ -56,9 +77,20 @@ export default function Login() {
             className="btn"
             variant="contained"
             color="customBtn"
+            disabled={invalid}
+            sx={{
+              '&.Mui-disabled': {
+                backgroundColor: '#ccc',
+                color: '#666',
+                cursor: 'not-allowed',
+
+                boxShadow: 'none',
+              },
+            }}
           >
             Login
           </Button>
+          <Link to="/">Go back home</Link>
         </Stack>
       </form>
     </div>

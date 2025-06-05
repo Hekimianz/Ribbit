@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
         credentials: 'include',
       });
       if (response.ok) {
-        const data = response.json();
+        const data = await response.json();
         setUser(data);
       } else if ([401, 403, 404].includes(response.status)) {
         setUser(null);
