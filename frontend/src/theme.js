@@ -3,8 +3,8 @@ import { createTheme } from '@mui/material';
 const theme = createTheme({
   palette: {
     customBtn: {
-      main: '#b0c4b1',
-      contrastText: '#003049',
+      main: '#73B65F',
+      contrastText: '#000',
     },
   },
 });

@@ -1,8 +1,14 @@
 .form {
-  padding: 2rem;
-  background-color: #003049;
+  padding: 4rem;
+  background-color: #004777;
   border-radius: 0.8rem;
   color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.form h1 {
+  text-align: center;
+  padding: 1rem;
 }
 
 .form input {
@@ -13,12 +19,15 @@
 
 .form label {
   font-size: 1.2rem;
+  font-weight: 500;
 }
 
 .errors {
-  color: red;
+  color: #a30000;
   font-size: 1.5rem;
-  margin: 1rem 0;
+  margin-bottom: 3rem;
+  list-style: none;
+  font-weight: 500;
 }
 
 .loader {
@@ -33,7 +42,7 @@
   -webkit-mask-composite: source-out;
   mask-composite: subtract;
   animation: l3 1s infinite linear;
-  margin: 1rem 0;
+  margin-bottom: 2rem;
 }
 @keyframes l3 {
   to {

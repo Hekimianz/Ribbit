@@ -42,7 +42,6 @@ export default function Login() {
 
   return (
     <div className="main-wrapper">
-      <h1>Login</h1>
       {loading && <div className={styles.loader}></div>}
       {errors.length > 0 && (
         <ul className={styles.errors}>
@@ -53,6 +52,7 @@ export default function Login() {
       )}
       <form className={styles.form} method="POST" onSubmit={handleLogin}>
         <Stack spacing={1} direction="column">
+          <h1>Login</h1>
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -82,7 +82,7 @@ export default function Login() {
                 backgroundColor: '#ccc',
                 color: '#666',
                 cursor: 'not-allowed',
-
+                marginTop: '3rem',
                 boxShadow: 'none',
               },
             }}

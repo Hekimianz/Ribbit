@@ -30,10 +30,7 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     setErrors([]);
-    const errorMessage = await register(
-      username[0].toUpperCase() + username.slice(1),
-      password
-    );
+    const errorMessage = await register(username, password);
     if (errorMessage) {
       setErrors([errorMessage]);
     } else {
@@ -43,7 +40,6 @@ export default function Register() {
   };
   return (
     <div className="main-wrapper">
-      <h1>Register</h1>
       {loading && <div className={styles.loader}></div>}
       {errors.length > 0 && (
         <ul className={styles.errors}>
@@ -54,6 +50,7 @@ export default function Register() {
       )}
       <form className={styles.form} method="POST" onSubmit={handleRegister}>
         <Stack spacing={1} direction="column">
+          <h1>Create Account</h1>
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -84,6 +81,7 @@ export default function Register() {
                 color: '#666',
                 cursor: 'not-allowed',
                 boxShadow: 'none',
+                marginTop: '3rem',
               },
             }}
           >
