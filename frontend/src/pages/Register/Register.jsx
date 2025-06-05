@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
 import styles from './Register.module.css';
 import { Stack, Button } from '@mui/material';
 import { useNavigate } from 'react-router';
@@ -31,9 +30,11 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     setErrors([]);
-    const errorMessage = await register(username, password);
+    const errorMessage = await register(
+      username[0].toUpperCase() + username.slice(1),
+      password
+    );
     if (errorMessage) {
-      console.log(errorMessage);
       setErrors([errorMessage]);
     } else {
       navigate('/login');
@@ -46,8 +47,8 @@ export default function Register() {
       {loading && <div className={styles.loader}></div>}
       {errors.length > 0 && (
         <ul className={styles.errors}>
-          {errors.map((error) => {
-            return <li>{error}</li>;
+          {errors.map((error, i) => {
+            return <li key={i}>{error}</li>;
           })}
         </ul>
       )}
@@ -88,7 +89,6 @@ export default function Register() {
           >
             Register
           </Button>
-          <Link to="/">Go back home</Link>
         </Stack>
       </form>
     </div>

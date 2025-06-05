@@ -28,13 +28,17 @@
 }
 
 a {
-  color: #8ecae6;
   text-decoration: none;
   transition: 0.2s all;
   text-align: center;
+  color: inherit;
 }
 
-a:hover {
-  text-decoration: underline;
-  color: #219ebc;
+.nav-link:hover {
+  text-decoration: none;
+}
+
+.logo {
+  width: 4rem;
+  margin-right: 2rem;
 }
