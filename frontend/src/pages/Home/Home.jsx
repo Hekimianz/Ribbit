@@ -6,6 +6,7 @@ import { getAllPosts } from '../../api/posts';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllPosts();
@@ -13,7 +14,7 @@ export default function Home() {
     };
     fetchData();
   }, []);
-  console.log(posts);
+
   return (
     <div className="main-wrapper">
       <Stack spacing={2} direction="column">
@@ -25,6 +26,7 @@ export default function Home() {
               date={post.createdAt}
               author={post.author.username}
               subribbit={post.subribbit.name}
+              id={post.id}
             />
           );
         })}

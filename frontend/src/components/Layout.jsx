@@ -4,7 +4,7 @@ export default function Layout() {
   return (
     <>
       <ResponsiveAppBar />
-      <main style={{ paddingTop: '64px' }}></main>
+      <main style={{ paddingTop: '32px' }}></main>
       <Outlet />
     </>
   );

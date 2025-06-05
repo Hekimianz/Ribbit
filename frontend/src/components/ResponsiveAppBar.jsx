@@ -101,7 +101,13 @@ export default function ResponsiveAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography sx={{ textAlign: 'center' }}>SubRibbits</Typography>
+                <Typography
+                  component={Link}
+                  to="/subribbits"
+                  sx={{ textAlign: 'center' }}
+                >
+                  SubRibbits
+                </Typography>
               </MenuItem>
               {!user && (
                 <MenuItem onClick={handleCloseNavMenu}>
@@ -158,17 +164,19 @@ export default function ResponsiveAppBar() {
             Ribbit
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                color: 'white',
-                display: 'block',
-                fontSize: '1.3rem',
-              }}
-            >
-              SubRibbits
-            </Button>
+            <Link to="/subribbits">
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  color: 'white',
+                  display: 'block',
+                  fontSize: '1.3rem',
+                }}
+              >
+                SubRibbits
+              </Button>
+            </Link>
             {!user && (
               <Link to="/login">
                 <Button

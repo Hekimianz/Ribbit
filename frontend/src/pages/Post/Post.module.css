@@ -1,0 +1,23 @@
+.wrapper {
+  align-items: center;
+  padding-bottom: 2rem;
+}
+
+.wrapper h1 {
+  text-align: center;
+}
+
+.wrapper img {
+  width: 80%;
+  max-width: 600px;
+  border-radius: 4px;
+}
+
+.wrapper a:hover {
+  text-decoration: underline;
+}
+
+.textContent {
+  font-size: 1.2rem;
+  font-weight: 500;
+}

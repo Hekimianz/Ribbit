@@ -1,0 +1,9 @@
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.author:hover,
+.subribbit:hover {
+  text-decoration: underline;
+}

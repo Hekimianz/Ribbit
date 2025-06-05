@@ -1,0 +1,17 @@
+.wrapper {
+  width: 15rem;
+  padding: 1rem;
+  background-color: #004777;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.wrapper p {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.data {
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}

@@ -11,3 +11,13 @@ export const getAllPosts = async () => {
     console.error('error fetching posts: ', error);
   }
 };
+
+export const getPost = async (id) => {
+  try {
+    const response = await fetch(`${base_url}/posts/${id}`);
+    if (response.ok) return await response.json();
+    return null;
+  } catch (error) {
+    console.error('Error fetching post data: ', error);
+  }
+};
