@@ -7,7 +7,6 @@ exports.getSubs = async (req, res) => {
 
 exports.getSub = async (req, res) => {
   const { name } = req.params;
-  console.log('name: ', name);
   const sub = await prisma.subribbit.findUnique({
     where: {
       name,
