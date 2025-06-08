@@ -1,10 +1,17 @@
 const prisma = require('../config/prismaClient');
 
 exports.getAll = async (req, res) => {
-  const { id } = req.params;
+  const { name } = req.params;
+  const userId = await prisma.user.findUnique({
+    where: { username: name },
+    select: {
+      id: true,
+    },
+  });
+
   const comments = await prisma.comment.findMany({
     where: {
-      authorId: id,
+      authorId: userId.id,
     },
     select: {
       id: true,
