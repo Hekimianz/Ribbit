@@ -11,6 +11,7 @@ import Subribbits from './pages/Subribbits/Subribbits';
 import Subribbit from './pages/Subribbit/Subribbit';
 import Layout from './components/Layout';
 import Post from './pages/Post/Post';
+import User from './pages/User/User';
 createRoot(document.getElementById('root')).render(
   <ThemeProvider theme={theme}>
     <AuthProvider>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/user/:name" element={<User />} />
             <Route path="/posts/:id" element={<Post />} />
             <Route path="/subribbits" element={<Subribbits />} />
             <Route path="/subribbits/:name" element={<Subribbit />} />

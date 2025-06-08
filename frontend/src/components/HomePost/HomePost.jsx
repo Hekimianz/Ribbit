@@ -14,7 +14,7 @@ export default function HomePost({ title, date, author, subribbit, id }) {
       </Link>
       <Stack spacing={0.5} direction="row">
         <span className={styles.date}>{formattedDate} |</span>
-        <Link to={`/users/${author}`} className={styles.author}>
+        <Link to={`/user/${author}`} className={styles.author}>
           by {author} |
         </Link>
         <Link to={`/subribbits/${subribbit}`} className={styles.subribbit}>
