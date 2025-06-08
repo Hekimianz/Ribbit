@@ -5,6 +5,8 @@ const { authenticateToken } = require('../middlewares/auth');
 
 route.get('/', postsController.getAll);
 
+route.get('/user/:name', postsController.getUsersPosts);
+
 route.get('/:id', postsController.getSingle);
 
 route.post('/', authenticateToken, postsController.post);

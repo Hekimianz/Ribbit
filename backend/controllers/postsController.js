@@ -24,6 +24,16 @@ exports.getAll = async (req, res) => {
   res.send(posts);
 };
 
+exports.getUsersPosts = async (req, res) => {
+  const { id } = req.params;
+  const posts = await prisma.post.findMany({
+    where: {
+      authorId: id,
+    },
+  });
+  res.send(posts);
+};
+
 exports.getSingle = async (req, res) => {
   const { id } = req.params;
   const post = await prisma.post.findUnique({
