@@ -4,7 +4,7 @@ const route = express.Router();
 const { authenticateToken } = require('../middlewares/auth');
 
 // Get all comments by user logged in
-route.get('/', authenticateToken, commentsController.getAll);
+route.get('/:id', commentsController.getAll);
 
 // Create new comment
 route.post('/post/:postId', authenticateToken, commentsController.post);

@@ -25,10 +25,20 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getUsersPosts = async (req, res) => {
-  const { id } = req.params;
+  const { name } = req.params;
+  const userId = await prisma.user.findUnique({
+    where: { username: name },
+    select: {
+      id: true,
+    },
+  });
+
   const posts = await prisma.post.findMany({
     where: {
-      authorId: id,
+      authorId: userId.id,
+    },
+    include: {
+      subribbit: true,
     },
   });
   res.send(posts);
