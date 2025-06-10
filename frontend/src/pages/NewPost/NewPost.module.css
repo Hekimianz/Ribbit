@@ -1,0 +1,26 @@
+.label {
+  font-size: 1.5rem;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.content,
+.input {
+  width: 300px;
+}
+
+.input,
+.content {
+  padding: 0.5rem;
+}
+
+.container {
+  width: 350px;
+  display: flex;
+  justify-content: flex-end;
+}

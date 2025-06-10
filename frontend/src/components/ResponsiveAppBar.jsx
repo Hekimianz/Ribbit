@@ -133,6 +133,17 @@ export default function ResponsiveAppBar() {
                   </Typography>
                 </MenuItem>
               )}
+              {user && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography
+                    component={Link}
+                    to="/post/new"
+                    sx={{ textAlign: 'center' }}
+                  >
+                    New Post
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <Box
@@ -177,6 +188,21 @@ export default function ResponsiveAppBar() {
                 SubRibbits
               </Button>
             </Link>
+            {user && (
+              <Link to="/post/new">
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    fontSize: '1.3rem',
+                  }}
+                >
+                  New Post
+                </Button>
+              </Link>
+            )}
             {!user && (
               <Link to="/login">
                 <Button
@@ -231,6 +257,15 @@ export default function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography
+                    component={Link}
+                    to={`/user/${user?.username}`}
+                    sx={{ textAlign: 'center' }}
+                  >
+                    Profile
+                  </Typography>
+                </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography onClick={logout} sx={{ textAlign: 'center' }}>
                     Logout

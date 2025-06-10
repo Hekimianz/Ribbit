@@ -11,3 +11,19 @@ export const getUsersComments = async (name) => {
     console.error('error fetching comments: ', error);
   }
 };
+
+export const createComment = async (postId, text) => {
+  try {
+    const response = await fetch(`${base_url}/comments/post/${postId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ text }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error posting comment: ', error);
+  }
+};

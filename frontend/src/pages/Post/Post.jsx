@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import { getPost } from '../../api/posts';
-import { Stack } from '@mui/material';
+import { createComment } from '../../api/comments';
+import { Stack, Button } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 import Comment from '../../components/Comment/Comment';
 import styles from './Post.module.css';
@@ -9,6 +10,8 @@ import styles from './Post.module.css';
 export default function Post() {
   const { id } = useParams();
   const [post, setPost] = useState([]);
+  const [commentText, setCommentText] = useState('');
+  const [invalid, setInvalid] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPost(id);
@@ -16,6 +19,14 @@ export default function Post() {
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    if (!commentText) {
+      setInvalid(true);
+    } else {
+      setInvalid(false);
+    }
+  }, [commentText]);
 
   const formattedDate = post.createdAt
     ? formatDistanceToNow(new Date(post.createdAt), {
@@ -39,6 +50,46 @@ export default function Post() {
         </Link>
       </Stack>
       <h3>Comments</h3>
+      <Stack
+        direction="column"
+        sx={{
+          gap: '1rem',
+          alignItems: 'center',
+        }}
+        className={styles.inputCont}
+      >
+        <textarea
+          name="newComment"
+          id="newComment"
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          placeholder="New Comment"
+        ></textarea>
+        <Button
+          type="submit"
+          className="btn"
+          variant="contained"
+          color="customBtn"
+          disabled={invalid}
+          sx={{
+            '&.Mui-disabled': {
+              backgroundColor: '#ccc',
+              color: '#666',
+              cursor: 'not-allowed',
+              boxShadow: 'none',
+              marginBottom: '1rem',
+            },
+          }}
+          onClick={async () => {
+            await createComment(id, commentText);
+            const updatedPost = await getPost(id);
+            setPost(updatedPost);
+            setCommentText('');
+          }}
+        >
+          Post comment
+        </Button>
+      </Stack>
       {post.comments?.map((comment) => {
         return (
           <Comment

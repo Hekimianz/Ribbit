@@ -31,3 +31,18 @@ export const getUsersPosts = async (name) => {
     console.error('Error fetching posts: ', error);
   }
 };
+
+export const createPost = async (title, textContent, subribbitId) => {
+  try {
+    const response = await fetch(`${base_url}/posts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ title, textContent, subribbitId }),
+    });
+    if (response.ok) return await response.json();
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating post: ', error);
+  }
+};

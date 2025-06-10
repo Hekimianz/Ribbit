@@ -18,6 +18,7 @@ export default function Home() {
   return (
     <div className="main-wrapper">
       <Stack spacing={2} direction="column">
+        <h1 className={styles.title}>All Posts</h1>
         {posts.reverse().map((post) => {
           return (
             <HomePost
