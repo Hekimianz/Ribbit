@@ -2,3 +2,13 @@
   text-align: center;
   font-size: 2.5rem;
 }
+
+.pageBtns button {
+  font-size: 1.3rem;
+  color: #004776;
+  border-radius: 8px;
+}
+
+.pageBtns button:hover {
+  background-color: #00477613;
+}

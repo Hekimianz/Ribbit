@@ -28,7 +28,6 @@ export default function User() {
     fetchData();
   }, [name]);
 
-  console.log(comments);
   return (
     <Stack
       direction="column"
@@ -40,32 +39,40 @@ export default function User() {
       <h1 className={styles.title}>{name[0].toUpperCase() + name.slice(1)}</h1>
       <h2 className={styles.subtitle}>Posts:</h2>
       <Stack spacing={2} className={styles.posts}>
-        {posts.map((post) => {
-          return (
-            <HomePost
-              title={post.title}
-              date={post.createdAt}
-              author={name}
-              subribbit={post.subribbit.name}
-              id={post.id}
-              key={post.id}
-            />
-          );
-        })}
+        {posts.length < 1 ? (
+          <p className={styles.subtitle}>No posts yet!</p>
+        ) : (
+          posts.map((post) => {
+            return (
+              <HomePost
+                title={post.title}
+                date={post.createdAt}
+                author={name}
+                subribbit={post.subribbit.name}
+                id={post.id}
+                key={post.id}
+              />
+            );
+          })
+        )}
       </Stack>
       <h2 className={styles.subtitle}>Comments:</h2>
       <div className={styles.comments}>
-        {comments.map((comment) => {
-          return (
-            <Link
-              key={comment.id}
-              className={styles.link}
-              to={`/posts/${comment.postId}`}
-            >
-              <Comment text={comment.text} date={comment.createdAt} />
-            </Link>
-          );
-        })}
+        {comments.length < 1 ? (
+          <p className={styles.subtitle}>No comments yet!</p>
+        ) : (
+          comments.map((comment) => {
+            return (
+              <Link
+                key={comment.id}
+                className={styles.link}
+                to={`/posts/${comment.postId}`}
+              >
+                <Comment text={comment.text} date={comment.createdAt} />
+              </Link>
+            );
+          })
+        )}
       </div>
     </Stack>
   );

@@ -18,7 +18,7 @@ export default function Subribbit() {
     <div className={styles.wrapper}>
       <h2>{sub.name}</h2>
       <p>{sub.description}</p>
-      <hr />
+
       <h3>Posts</h3>
       <Stack spacing={2} className={styles.posts}>
         {sub?.posts?.map((post) => {
