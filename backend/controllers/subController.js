@@ -7,12 +7,16 @@ exports.getSubs = async (req, res) => {
 
 exports.getSub = async (req, res) => {
   const { name } = req.params;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
   const sub = await prisma.subribbit.findUnique({
     where: {
       name,
     },
     include: {
       posts: {
+        skip: (page - 1) * limit,
+        take: limit,
         select: {
           id: true,
           createdAt: true,
@@ -27,10 +31,18 @@ exports.getSub = async (req, res) => {
       },
     },
   });
+
   if (!sub) {
     res.status(404).json({ error: 'Subribbit does not exist!' });
   }
-  res.send(sub);
+  const totalCount = await prisma.post.count({
+    where: {
+      subribbit: {
+        name,
+      },
+    },
+  });
+  res.json({ sub, totalCount });
 };
 
 exports.createSub = async (req, res) => {
