@@ -1,27 +1,35 @@
 const prisma = require('../config/prismaClient');
 
 exports.getAll = async (req, res) => {
-  const posts = await prisma.post.findMany({
-    select: {
-      subribbit: {
-        select: {
-          id: true,
-          name: true,
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const [posts, totalCount] = await Promise.all([
+    prisma.post.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      select: {
+        subribbit: {
+          select: {
+            id: true,
+            name: true,
+          },
         },
-      },
-      author: {
-        select: {
-          id: true,
-          username: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
         },
+        id: true,
+        createdAt: true,
+        title: true,
+        image: true,
       },
-      id: true,
-      createdAt: true,
-      title: true,
-      image: true,
-    },
-  });
-  res.send(posts);
+    }),
+    prisma.post.count(),
+  ]);
+
+  res.json({ posts, totalCount });
 };
 
 exports.getUsersPosts = async (req, res) => {
