@@ -26,6 +26,12 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
+.pageBtns button {
+  font-size: 1.3rem;
+  color: #004776;
+  border-radius: 8px;
+}
 
-.posts {
+.pageBtns button:hover {
+  background-color: #00477613;
 }

@@ -12,9 +12,11 @@ export const getAllSubs = async () => {
   }
 };
 
-export const getSub = async (name) => {
+export const getSub = async (name, page = 1, limit = 10) => {
   try {
-    const response = await fetch(`${base_url}/subs/${name}`);
+    const response = await fetch(
+      `${base_url}/subs/${name}?page=${page}&limit=${limit}`
+    );
     if (response.ok) return await response.json();
     return null;
   } catch (error) {
