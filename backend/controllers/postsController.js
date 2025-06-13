@@ -81,7 +81,7 @@ exports.getSingle = async (req, res) => {
 };
 
 exports.post = async (req, res) => {
-  const { title, textContent, image, subribbitId } = req.body;
+  const { title, textContent, subribbitId } = req.body;
 
   if (!title) {
     return res.status(400).json({ error: 'Title is required' });
@@ -97,11 +97,20 @@ exports.post = async (req, res) => {
     return res.status(404).json({ error: 'Subribbit not found' });
   }
 
+  let imageUrl = null;
+  let imagePublicId = null;
+
+  if (req.file) {
+    imageUrl = req.file.path;
+    imagePublicId = req.file.filename;
+  }
+
   const post = await prisma.post.create({
     data: {
       title,
       textContent,
-      image,
+      image: imageUrl,
+      imagePublicId,
       subribbitId,
       authorId: req.user.id,
     },
