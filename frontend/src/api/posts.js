@@ -34,16 +34,16 @@ export const getUsersPosts = async (name) => {
   }
 };
 
-export const createPost = async (title, textContent, subribbitId) => {
+export const createPost = async (formData) => {
   try {
     const response = await fetch(`${base_url}/posts`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ title, textContent, subribbitId }),
+      body: formData,
     });
-    if (response.ok) return await response.json();
-    return await response.json();
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Unknown Error');
+    return data;
   } catch (error) {
     console.error('Error creating post: ', error);
   }
