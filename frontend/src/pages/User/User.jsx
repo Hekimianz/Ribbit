@@ -7,8 +7,10 @@ import { Link } from 'react-router';
 import styles from './User.module.css';
 import HomePost from '../../components/HomePost/HomePost';
 import Comment from '../../components/Comment/Comment';
+
 export default function User() {
   const { name } = useParams();
+
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
 
@@ -63,13 +65,23 @@ export default function User() {
           <p className={styles.subtitle}>No comments yet!</p>
         ) : (
           comments.map((comment) => {
+            const score = comment.votes.reduce((acc, v) => acc + v.value, 0);
             return (
               <Link
                 key={comment.id}
                 className={styles.link}
                 to={`/posts/${comment.postId}`}
               >
-                <Comment text={comment.text} date={comment.createdAt} />
+                <Comment
+                  key={comment.id}
+                  author={''}
+                  disabled={true}
+                  authorId={comment.authorId}
+                  date={comment.createdAt}
+                  text={comment.text}
+                  id={comment.id}
+                  score={score}
+                />
               </Link>
             );
           })

@@ -17,7 +17,10 @@ export const getAllPosts = async (page = 1, limit = 10) => {
 export const getPost = async (id) => {
   try {
     const response = await fetch(`${base_url}/posts/${id}`);
-    if (response.ok) return await response.json();
+    const data = await response.json();
+    console.log(data);
+    if (response.ok) return data;
+
     return null;
   } catch (error) {
     console.error('Error fetching post data: ', error);

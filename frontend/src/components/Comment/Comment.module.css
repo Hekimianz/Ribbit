@@ -1,6 +1,5 @@
 .wrapper {
-  width: 15rem;
-
+  width: 23rem;
   padding: 1rem;
   background-color: #004777;
   border-radius: 8px;
@@ -15,4 +14,27 @@
 .data {
   justify-content: space-between;
   margin-top: 0.5rem;
+}
+
+.upvote,
+.downvote {
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.upvote:hover,
+.downvote:hover {
+  transform: scale(1.1);
+}
+
+.upvote:hover {
+  fill: #73b65f;
+}
+
+.downvote:hover {
+  fill: #f53131;
+}
+
+.score {
+  padding: 0 0.5rem;
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { getPost, deletePost } from '../../api/posts';
-import { createComment } from '../../api/comments';
+import { createComment, vote } from '../../api/comments';
 import { Stack, Button, Backdrop } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../../context/authContext';
@@ -33,6 +33,33 @@ export default function Post() {
       setInvalid(false);
     }
   }, [commentText]);
+
+  const handleCommentVote = async (value, commentId) => {
+    await vote(value, commentId);
+    setPost((prev) => {
+      const updatedComments = prev.comments.map((comment) => {
+        if (comment.id === commentId) {
+          const existingVote = comment.votes.find((v) => v.userId === user?.id);
+          let newVotes;
+
+          if (!existingVote) {
+            newVotes = [...comment.votes, { userId: user?.id, value }];
+          } else if (existingVote.value === value) {
+            newVotes = comment.votes.filter((v) => v.userId !== user?.id);
+          } else {
+            newVotes = comment.votes.map((v) =>
+              v.userId === user?.id ? { ...v, value } : v
+            );
+          }
+
+          return { ...comment, votes: newVotes };
+        }
+        return comment;
+      });
+
+      return { ...prev, comments: updatedComments };
+    });
+  };
 
   const formattedDate = post.createdAt
     ? formatDistanceToNow(new Date(post.createdAt), {
@@ -154,6 +181,7 @@ export default function Post() {
         </Button>
       </Stack>
       {post.comments?.map((comment) => {
+        const score = comment.votes.reduce((acc, v) => acc + v.value, 0);
         return (
           <Comment
             key={comment.id}
@@ -161,6 +189,11 @@ export default function Post() {
             authorId={comment.authorId}
             date={comment.createdAt}
             text={comment.text}
+            id={comment.id}
+            votes={comment.votes}
+            userId={user?.id}
+            score={score}
+            onVote={handleCommentVote}
           />
         );
       })}
