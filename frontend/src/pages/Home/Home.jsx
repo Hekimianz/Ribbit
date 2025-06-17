@@ -20,6 +20,7 @@ export default function Home() {
     fetchData();
   }, [page]);
   const totalPages = Math.ceil(totalCount / 10);
+  console.log(posts);
 
   return (
     <div className="main-wrapper">
@@ -34,6 +35,7 @@ export default function Home() {
               author={post.author.username}
               subribbit={post.subribbit.name}
               id={post.id}
+              img={post.image}
             />
           );
         })}

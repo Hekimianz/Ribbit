@@ -1,17 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router';
-import { getPost } from '../../api/posts';
+import { useParams, Link, useNavigate } from 'react-router';
+import { getPost, deletePost } from '../../api/posts';
 import { createComment } from '../../api/comments';
-import { Stack, Button } from '@mui/material';
+import { Stack, Button, Backdrop } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
+import { useAuth } from '../../context/authContext';
 import Comment from '../../components/Comment/Comment';
 import styles from './Post.module.css';
 
 export default function Post() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [post, setPost] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [invalid, setInvalid] = useState(true);
+  const [confDelete, setConfDelete] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPost(id);
@@ -19,6 +24,7 @@ export default function Post() {
     };
     fetchData();
   }, [id]);
+  console.log(post);
 
   useEffect(() => {
     if (!commentText) {
@@ -40,6 +46,53 @@ export default function Post() {
       {post.textContent && (
         <p className={styles.textContent}>{post.textContent}</p>
       )}
+      {confDelete && (
+        <Backdrop
+          open={confDelete}
+          className={styles.confDelete}
+          sx={{
+            alignItems: 'center',
+            zIndex: 2,
+            color: '#FDEFD5',
+          }}
+        >
+          <Stack gap="2rem">
+            <h2>Are you sure you want to delete this post?</h2>
+            <Stack
+              direction="row"
+              gap="2rem"
+              sx={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  background: '#ae2012',
+                  color: '#fff',
+                }}
+                onClick={() => {
+                  deletePost(post.id);
+                  navigate('/');
+                }}
+              >
+                Yes
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  background: '#73B65F',
+                  color: '#000',
+                }}
+                onClick={() => setConfDelete(false)}
+              >
+                No
+              </Button>
+            </Stack>
+          </Stack>
+        </Backdrop>
+      )}
       <Stack spacing={2} direction="row">
         <Link to={`/user/${post.author?.username}`}>
           Uploaded by {post.author?.username}
@@ -48,8 +101,18 @@ export default function Post() {
         <Link to={`/subribbits/${post.subribbit?.name}`}>
           r/{post.subribbit?.name}
         </Link>
+        {user?.id === post.authorId && (
+          <span
+            onClick={() => {
+              setConfDelete(true);
+            }}
+            className={styles.delete}
+          >
+            Delete Post
+          </span>
+        )}
       </Stack>
-      <h3>Comments</h3>
+
       <Stack
         direction="column"
         sx={{

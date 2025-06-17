@@ -25,3 +25,12 @@
 .inputCont textarea {
   padding: 0.5rem;
 }
+
+.delete {
+  color: rgb(107, 20, 20);
+  cursor: pointer;
+}
+
+.delete:hover {
+  text-decoration: underline;
+}

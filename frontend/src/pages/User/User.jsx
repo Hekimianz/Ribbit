@@ -51,6 +51,7 @@ export default function User() {
                 subribbit={post.subribbit.name}
                 id={post.id}
                 key={post.id}
+                img={post.image}
               />
             );
           })

@@ -50,3 +50,10 @@
     transform: rotate(1turn);
   }
 }
+
+.error {
+  margin-top: 2rem;
+  font-size: 2rem;
+  color: red;
+  font-weight: 500;
+}

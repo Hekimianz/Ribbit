@@ -8,9 +8,11 @@ export default function Register() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confPassword, setConfPassword] = useState('');
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [invalid, setInvalid] = useState(true);
+  const [passDontMatch, setPassDontMatch] = useState(false);
 
   useEffect(() => {
     if (!username || !password) {
@@ -19,6 +21,14 @@ export default function Register() {
       setInvalid(false);
     }
   }, [username, password]);
+
+  useEffect(() => {
+    if (password !== confPassword) {
+      setPassDontMatch(true);
+    } else {
+      setPassDontMatch(false);
+    }
+  }, [confPassword, password]);
 
   useEffect(() => {
     if (user) {
@@ -69,12 +79,21 @@ export default function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <label htmlFor="confPassword">Confirm Password:</label>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            name="confPassword"
+            id="confPassword"
+            value={confPassword}
+            onChange={(e) => setConfPassword(e.target.value)}
+          />
           <Button
             type="submit"
             className="btn"
             variant="contained"
             color="customBtn"
-            disabled={invalid}
+            disabled={invalid || passDontMatch}
             sx={{
               '&.Mui-disabled': {
                 backgroundColor: '#ccc',
@@ -89,6 +108,9 @@ export default function Register() {
           </Button>
         </Stack>
       </form>
+      {passDontMatch && (
+        <span className={styles.error}>Passwords dont match!</span>
+      )}
     </div>
   );
 }

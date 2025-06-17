@@ -48,3 +48,17 @@ export const createPost = async (formData) => {
     console.error('Error creating post: ', error);
   }
 };
+
+export const deletePost = async (id) => {
+  try {
+    const response = await fetch(`${base_url}/posts/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Unknown Error');
+    return data;
+  } catch (error) {
+    console.error('Error deleting post: ', error);
+  }
+};

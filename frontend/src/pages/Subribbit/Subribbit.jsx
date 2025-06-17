@@ -19,7 +19,7 @@ export default function Subribbit() {
     };
     fetchData();
   }, [name, page]);
-
+  console.log(sub.posts);
   const totalPages = Math.ceil(totalCount / 10);
   return (
     <div className={styles.wrapper}>
@@ -37,6 +37,7 @@ export default function Subribbit() {
               author={post.author.username}
               id={post.id}
               subribbit={sub.name}
+              img={post.image}
             />
           );
         })}
