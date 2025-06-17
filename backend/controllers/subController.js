@@ -61,3 +61,77 @@ exports.createSub = async (req, res) => {
   });
   res.status(201).json({ newSub });
 };
+
+exports.subscribeToSub = async (req, res) => {
+  const userId = req.user?.id;
+  const { subribbitName } = req.body;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  if (!subribbitName) {
+    return res.status(400).json({ error: 'Missing subribbit name' });
+  }
+
+  const subribbit = await prisma.subribbit.findUnique({
+    where: { name: subribbitName },
+  });
+
+  if (!subribbit) {
+    return res.status(404).json({ error: 'Subribbit not found' });
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        subscribedSubs: {
+          connect: { id: subribbit.id },
+        },
+      },
+    });
+
+    res.status(200).json({ message: `Subscribed to ${subribbitName}` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+exports.unsubscribeFromSub = async (req, res) => {
+  const userId = req.user?.id;
+  const { subribbitName } = req.body;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  if (!subribbitName) {
+    return res.status(400).json({ error: 'Missing subribbit name' });
+  }
+
+  const subribbit = await prisma.subribbit.findUnique({
+    where: { name: subribbitName },
+  });
+
+  if (!subribbit) {
+    return res.status(404).json({ error: 'Subribbit not found' });
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        subscribedSubs: {
+          disconnect: { id: subribbit.id },
+        },
+      },
+    });
+
+    res.status(200).json({ message: `Unsubscribed from ${subribbitName}` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to unsubscribe' });
+  }
+};
