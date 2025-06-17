@@ -2,11 +2,22 @@ const prisma = require('../config/prismaClient');
 
 exports.getAll = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
+  const { search } = req.query;
+  console.log(search);
   const limit = parseInt(req.query.limit) || 10;
+  const whereClause = search
+    ? {
+        title: {
+          contains: search,
+          mode: 'insensitive', // case-insensitive search
+        },
+      }
+    : {};
   const [posts, totalCount] = await Promise.all([
     prisma.post.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      where: whereClause,
       orderBy: {
         createdAt: 'desc',
       },
@@ -30,7 +41,9 @@ exports.getAll = async (req, res) => {
         votes: true,
       },
     }),
-    prisma.post.count(),
+    prisma.post.count({
+      where: whereClause,
+    }),
   ]);
 
   res.json({ posts, totalCount });
