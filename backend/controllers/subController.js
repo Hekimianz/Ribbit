@@ -21,6 +21,7 @@ exports.getSub = async (req, res) => {
           id: true,
           createdAt: true,
           title: true,
+          image: true,
           author: {
             select: {
               id: true,
