@@ -7,6 +7,9 @@ exports.getAll = async (req, res) => {
     prisma.post.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
       select: {
         subribbit: {
           select: {
@@ -24,6 +27,7 @@ exports.getAll = async (req, res) => {
         createdAt: true,
         title: true,
         image: true,
+        votes: true,
       },
     }),
     prisma.post.count(),
@@ -47,6 +51,7 @@ exports.getUsersPosts = async (req, res) => {
     },
     include: {
       subribbit: true,
+      votes: true,
     },
   });
   res.send(posts);

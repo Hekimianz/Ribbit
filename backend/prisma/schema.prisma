@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-    id          String        @id @default(uuid())
-    username    String        @unique
-    password    String
-    posts       Post[]
-    comments    Comment[]
-    postVotes   PostVote[]
-    CommentVote CommentVote[]
+    id           String        @id @default(uuid())
+    username     String        @unique
+    password     String
+    posts        Post[]
+    comments     Comment[]
+    postVotes    PostVote[]
+    commentVotes CommentVote[]
 }
 
 model Post {
@@ -28,8 +28,8 @@ model Post {
     authorId      String
     subribbit     Subribbit  @relation(fields: [subribbitId], references: [id])
     subribbitId   String
-    comments      Comment[]
     votes         PostVote[]
+    comments      Comment[]
 }
 
 model Subribbit {
@@ -47,7 +47,7 @@ model Comment {
     authorId  String?
     post      Post?         @relation(fields: [postId], references: [id])
     postId    String?
-    votes     CommentVote[] @relation("CommentToVotes")
+    votes     CommentVote[]
 }
 
 model PostVote {
@@ -55,7 +55,7 @@ model PostVote {
     value     Int
     user      User     @relation(fields: [userId], references: [id])
     userId    String
-    post      Post     @relation(fields: [postId], references: [id])
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
     createdAt DateTime @default(now())
 
@@ -67,9 +67,9 @@ model CommentVote {
     value     Int
     user      User     @relation(fields: [userId], references: [id])
     userId    String
-    comment   Comment  @relation("CommentToVotes", fields: [commentId], references: [id])
     commentId String
     createdAt DateTime @default(now())
+    comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
     @@unique([userId, commentId])
 }
