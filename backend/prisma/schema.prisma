@@ -8,25 +8,28 @@ datasource db {
 }
 
 model User {
-    id       String    @id @default(uuid())
-    username String    @unique
-    password String
-    posts    Post[]
-    comments Comment[]
+    id          String        @id @default(uuid())
+    username    String        @unique
+    password    String
+    posts       Post[]
+    comments    Comment[]
+    postVotes   PostVote[]
+    CommentVote CommentVote[]
 }
 
 model Post {
-    id            String    @id @default(uuid())
-    createdAt     DateTime  @default(now())
+    id            String     @id @default(uuid())
+    createdAt     DateTime   @default(now())
     title         String
     textContent   String?
     image         String?
     imagePublicId String?
-    author        User      @relation(fields: [authorId], references: [id])
+    author        User       @relation(fields: [authorId], references: [id])
     authorId      String
-    subribbit     Subribbit @relation(fields: [subribbitId], references: [id])
+    subribbit     Subribbit  @relation(fields: [subribbitId], references: [id])
     subribbitId   String
     comments      Comment[]
+    votes         PostVote[]
 }
 
 model Subribbit {
@@ -37,11 +40,36 @@ model Subribbit {
 }
 
 model Comment {
-    id        String   @id @default(uuid())
+    id        String        @id @default(uuid())
     text      String
-    createdAt DateTime @default(now())
-    author    User?    @relation(fields: [authorId], references: [id])
+    createdAt DateTime      @default(now())
+    author    User?         @relation(fields: [authorId], references: [id])
     authorId  String?
-    post      Post?    @relation(fields: [postId], references: [id])
+    post      Post?         @relation(fields: [postId], references: [id])
     postId    String?
+    votes     CommentVote[] @relation("CommentToVotes")
+}
+
+model PostVote {
+    id        String   @id @default(uuid())
+    value     Int
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    post      Post     @relation(fields: [postId], references: [id])
+    postId    String
+    createdAt DateTime @default(now())
+
+    @@unique([userId, postId])
+}
+
+model CommentVote {
+    id        String   @id @default(uuid())
+    value     Int
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    comment   Comment  @relation("CommentToVotes", fields: [commentId], references: [id])
+    commentId String
+    createdAt DateTime @default(now())
+
+    @@unique([userId, commentId])
 }

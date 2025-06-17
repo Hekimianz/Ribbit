@@ -59,19 +59,13 @@ exports.getSingle = async (req, res) => {
     include: {
       comments: {
         include: {
-          author: {
-            select: {
-              username: true,
-            },
-          },
+          author: { select: { username: true } },
+          votes: true,
         },
       },
-      author: {
-        select: {
-          username: true,
-        },
-      },
+      author: { select: { username: true } },
       subribbit: true,
+      votes: true,
     },
   });
   if (!post) {
@@ -133,4 +127,40 @@ exports.delete = async (req, res) => {
   } else {
     res.send('Not authorized to delete that post');
   }
+};
+
+exports.vote = async (req, res) => {
+  const { id: postId } = req.params;
+  const { value } = req.body;
+  const userId = req.user.id;
+
+  if (![1, -1].includes(value))
+    return res.status(400).json({ error: 'Invalid vote' });
+
+  const existingVote = await prisma.postVote.findUnique({
+    where: {
+      userId_postId: { userId, postId },
+    },
+  });
+
+  if (!existingVote) {
+    await prisma.postVote.create({
+      data: { userId, postId, value },
+    });
+    return res.status(201).json({ message: 'Voted' });
+  }
+
+  if (existingVote.value === value) {
+    await prisma.postVote.delete({
+      where: { userId_postId: { userId, postId } },
+    });
+    return res.status(200).json({ message: 'Vote removed' });
+  }
+
+  await prisma.postVote.update({
+    where: { userId_postId: { userId, postId } },
+    data: { value },
+  });
+
+  return res.status(200).json({ message: 'Vote updated' });
 };

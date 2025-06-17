@@ -19,6 +19,8 @@ route.post(
   postsController.post
 );
 
+route.post('/:id/vote', authenticateToken, postsController.vote);
+
 route.delete('/:id', authenticateToken, postsController.delete);
 
 module.exports = route;
