@@ -47,6 +47,24 @@ async function seed() {
     );
   }
 
+  // 🔁 Subscribe each user to 1–3 subribbits
+  for (const user of users) {
+    const numSubscriptions = faker.number.int({ min: 1, max: 3 });
+    const subsToSubscribe = faker.helpers.arrayElements(
+      subribbits,
+      numSubscriptions
+    );
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        subscribedSubs: {
+          connect: subsToSubscribe.map((sub) => ({ id: sub.id })),
+        },
+      },
+    });
+  }
+
   const posts = [];
   for (let i = 0; i < 100; i++) {
     const author = faker.helpers.arrayElement(users);

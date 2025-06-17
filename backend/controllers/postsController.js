@@ -3,7 +3,7 @@ const prisma = require('../config/prismaClient');
 exports.getAll = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const { search } = req.query;
-  console.log(search);
+
   const limit = parseInt(req.query.limit) || 10;
   const whereClause = search
     ? {
@@ -181,4 +181,40 @@ exports.vote = async (req, res) => {
   });
 
   return res.status(200).json({ message: 'Vote updated' });
+};
+
+exports.getPostsFromSubs = async (req, res) => {
+  const { name } = req.params;
+
+  const user = await prisma.user.findUnique({
+    where: { username: name },
+    include: {
+      subscribedSubs: true,
+    },
+  });
+
+  if (!user) {
+    return res.status(404).send({ error: 'User not found' });
+  }
+
+  const subscribedSubNames = user.subscribedSubs.map((sub) => sub.name);
+
+  const posts = await prisma.post.findMany({
+    where: {
+      subribbit: {
+        name: {
+          in: subscribedSubNames,
+        },
+      },
+    },
+    include: {
+      author: true,
+      subribbit: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  res.send(posts);
 };

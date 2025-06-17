@@ -10,6 +10,12 @@ route.get('/', postsController.getAll);
 
 route.get('/user/:name', postsController.getUsersPosts);
 
+route.get(
+  '/user/subs/:name',
+  authenticateToken,
+  postsController.getPostsFromSubs
+);
+
 route.get('/:id', postsController.getSingle);
 
 route.post(

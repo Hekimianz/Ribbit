@@ -15,6 +15,8 @@ model User {
     comments     Comment[]
     postVotes    PostVote[]
     commentVotes CommentVote[]
+
+    subscribedSubs Subribbit[] @relation("UserSubscriptions")
 }
 
 model Post {
@@ -37,6 +39,8 @@ model Subribbit {
     name        String @unique
     description String
     posts       Post[]
+
+    subscribers User[] @relation("UserSubscriptions")
 }
 
 model Comment {
