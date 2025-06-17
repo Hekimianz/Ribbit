@@ -12,13 +12,17 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import Logo from '../assets/Logo.png';
 import { useAuth } from '../context/authContext';
+import { useNavigate } from 'react-router';
 
 export default function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { user, logout } = useAuth();
+  const [search, setSearch] = useState('');
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -274,6 +278,37 @@ export default function ResponsiveAppBar() {
               </Menu>
             </Box>
           )}
+          <TextField
+            label="Search"
+            variant="standard"
+            sx={{
+              input: {
+                color: 'white',
+              },
+              label: {
+                color: 'white',
+                '&.Mui-focused': {
+                  color: '#73B65F',
+                },
+              },
+              '& .MuiInput-underline:before': {
+                borderBottomColor: 'white',
+              },
+              '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+                borderBottomColor: 'white',
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: '#73B65F',
+              },
+            }}
+            value={search}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setSearch(newValue);
+
+              navigate(`/?search=${newValue}`);
+            }}
+          />
         </Toolbar>
       </Container>
     </AppBar>

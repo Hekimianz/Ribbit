@@ -3,22 +3,25 @@ import { Stack, Button } from '@mui/material';
 import HomePost from '../../components/HomePost/HomePost';
 import { useEffect, useState } from 'react';
 import { getAllPosts, vote } from '../../api/posts';
+import { useSearchParams } from 'react-router';
 
 export default function Home() {
   const [page, setPage] = useState(1);
+  const [searchParams] = useSearchParams();
   const [posts, setPosts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const search = searchParams.get('search') || undefined;
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getAllPosts(page, 10);
+      const data = await getAllPosts(page, 10, search);
       if (data) {
         setPosts(data.posts);
         setTotalCount(data.totalCount);
       }
     };
     fetchData();
-  }, [page]);
+  }, [page, search]);
   const totalPages = Math.ceil(totalCount / 10);
   console.log(posts);
 

@@ -1,10 +1,15 @@
 const base_url = import.meta.env.VITE_API_URL;
 
-export const getAllPosts = async (page = 1, limit = 10) => {
+export const getAllPosts = async (page = 1, limit = 10, search) => {
   try {
-    const response = await fetch(
-      `${base_url}/posts?page=${page}&limit=${limit}`
-    );
+    let response;
+    if (search) {
+      response = await fetch(
+        `${base_url}/posts?page=${page}&limit=${limit}&search=${search}`
+      );
+    } else {
+      response = await fetch(`${base_url}/posts?page=${page}&limit=${limit}`);
+    }
     if (response.ok) {
       return await response.json();
     }
