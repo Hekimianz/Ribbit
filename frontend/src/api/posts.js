@@ -65,3 +65,19 @@ export const deletePost = async (id) => {
     console.error('Error deleting post: ', error);
   }
 };
+
+export const vote = async (value, id) => {
+  try {
+    const response = await fetch(`${base_url}/posts/${id}/vote`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ value }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error voting on comment: ', error);
+  }
+};

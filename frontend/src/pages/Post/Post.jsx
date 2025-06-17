@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
-import { getPost, deletePost } from '../../api/posts';
+import { getPost, deletePost, vote as postVote } from '../../api/posts';
 import { createComment, vote } from '../../api/comments';
 import { Stack, Button, Backdrop } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
@@ -24,7 +24,6 @@ export default function Post() {
     };
     fetchData();
   }, [id]);
-  console.log(post);
 
   useEffect(() => {
     if (!commentText) {
@@ -33,6 +32,33 @@ export default function Post() {
       setInvalid(false);
     }
   }, [commentText]);
+
+  const handlePostVote = async (value, postId, userId) => {
+    await postVote(value, postId);
+
+    setPost((prevPost) => {
+      const existingVote = prevPost.votes.find((v) => v.userId === userId);
+      let updatedVotes;
+
+      if (!existingVote) {
+        // New vote
+        updatedVotes = [...prevPost.votes, { userId, value }];
+      } else if (existingVote.value === value) {
+        // Toggle off (remove vote)
+        updatedVotes = prevPost.votes.filter((v) => v.userId !== userId);
+      } else {
+        // Change vote value
+        updatedVotes = prevPost.votes.map((v) =>
+          v.userId === userId ? { ...v, value } : v
+        );
+      }
+
+      return {
+        ...prevPost,
+        votes: updatedVotes,
+      };
+    });
+  };
 
   const handleCommentVote = async (value, commentId) => {
     await vote(value, commentId);
@@ -60,6 +86,9 @@ export default function Post() {
       return { ...prev, comments: updatedComments };
     });
   };
+
+  const userVote = post?.votes?.find((v) => v.userId === user.id);
+  const voteValue = userVote?.value;
 
   const formattedDate = post.createdAt
     ? formatDistanceToNow(new Date(post.createdAt), {
@@ -138,6 +167,35 @@ export default function Post() {
             Delete Post
           </span>
         )}
+        <Stack direction="row" spacing={0.5}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="16px"
+            viewBox="0 -960 960 960"
+            width="16px"
+            className={styles.upvote}
+            fill={voteValue === 1 ? '#73B65F' : '#000'}
+            onClick={() => {
+              handlePostVote(1, id, user.id);
+            }}
+          >
+            <path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z" />
+          </svg>
+          <span>{post?.votes?.reduce((acc, v) => acc + v.value, 0)}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="16px"
+            viewBox="0 -960 960 960"
+            width="16px"
+            className={styles.downvote}
+            fill={voteValue === -1 ? '#f53131' : '#000'}
+            onClick={() => {
+              handlePostVote(-1, id, user.id);
+            }}
+          >
+            <path d="M240-840h440v520L400-40l-50-50q-7-7-11.5-19t-4.5-23v-14l44-174H120q-32 0-56-24t-24-56v-80q0-7 2-15t4-15l120-282q9-20 30-34t44-14Zm360 80H240L120-480v80h360l-54 220 174-174v-406Zm0 406v-406 406Zm80 34v-80h120v-360H680v-80h200v520H680Z" />
+          </svg>
+        </Stack>
       </Stack>
 
       <Stack

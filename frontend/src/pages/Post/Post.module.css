@@ -34,3 +34,21 @@
 .delete:hover {
   text-decoration: underline;
 }
+
+.upvote:hover,
+.downvote:hover {
+  transform: scale(1.1);
+}
+.upvote,
+.downvote {
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.upvote:hover {
+  fill: #73b65f;
+}
+
+.downvote:hover {
+  fill: #f53131;
+}

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { getUsersPosts } from '../../api/posts';
+import { getUsersPosts, vote } from '../../api/posts';
 import { getUsersComments } from '../../api/comments';
 import { Stack } from '@mui/material';
 import { Link } from 'react-router';
+
 import styles from './User.module.css';
 import HomePost from '../../components/HomePost/HomePost';
 import Comment from '../../components/Comment/Comment';
@@ -13,6 +14,7 @@ export default function User() {
 
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  console.log(posts);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +31,36 @@ export default function User() {
     };
     fetchData();
   }, [name]);
+
+  const handlePostVote = async (value, postId, userId) => {
+    await vote(value, postId);
+
+    setPosts((prevPosts) => {
+      return prevPosts.map((post) => {
+        if (post.id === postId) {
+          const existingVote = post.votes.find((v) => v.userId === userId);
+          let updatedVotes;
+
+          if (!existingVote) {
+            // Add new vote
+            updatedVotes = [...post.votes, { userId, value }];
+          } else if (existingVote.value === value) {
+            // Remove vote (toggle off)
+            updatedVotes = post.votes.filter((v) => v.userId !== userId);
+          } else {
+            // Change vote
+            updatedVotes = post.votes.map((v) =>
+              v.userId === userId ? { ...v, value } : v
+            );
+          }
+
+          return { ...post, votes: updatedVotes };
+        }
+
+        return post;
+      });
+    });
+  };
 
   return (
     <Stack
@@ -54,6 +86,8 @@ export default function User() {
                 id={post.id}
                 key={post.id}
                 img={post.image}
+                votes={post.votes}
+                onVote={handlePostVote}
               />
             );
           })
