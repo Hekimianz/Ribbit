@@ -19,6 +19,23 @@ export const getAllPosts = async (page = 1, limit = 10, search) => {
   }
 };
 
+export const getPostsFromSubs = async (name, page = 1, limit = 10) => {
+  try {
+    let url = `${base_url}/posts/user/subs/${name}?page=${page}&limit=${limit}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    if (response.ok) return data;
+    return null;
+  } catch (error) {
+    console.error('Error fetching posts from subs: ', error);
+  }
+};
+
 export const getPost = async (id) => {
   try {
     const response = await fetch(`${base_url}/posts/${id}`);

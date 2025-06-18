@@ -185,6 +185,9 @@ exports.vote = async (req, res) => {
 
 exports.getPostsFromSubs = async (req, res) => {
   const { name } = req.params;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const { search } = req.query;
 
   const user = await prisma.user.findUnique({
     where: { username: name },
@@ -199,22 +202,52 @@ exports.getPostsFromSubs = async (req, res) => {
 
   const subscribedSubNames = user.subscribedSubs.map((sub) => sub.name);
 
-  const posts = await prisma.post.findMany({
-    where: {
-      subribbit: {
-        name: {
-          in: subscribedSubNames,
-        },
+  const whereClause = {
+    subribbit: {
+      name: {
+        in: subscribedSubNames,
       },
     },
-    include: {
-      author: true,
-      subribbit: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+    ...(search && {
+      title: {
+        contains: search,
+        mode: 'insensitive',
+      },
+    }),
+  };
 
-  res.send(posts);
+  const [posts, totalCount] = await Promise.all([
+    prisma.post.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      where: whereClause,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        subribbit: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        id: true,
+        createdAt: true,
+        title: true,
+        image: true,
+        votes: true,
+      },
+    }),
+    prisma.post.count({
+      where: whereClause,
+    }),
+  ]);
+
+  res.json({ posts, totalCount });
 };

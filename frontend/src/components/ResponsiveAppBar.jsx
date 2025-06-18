@@ -148,6 +148,17 @@ export default function ResponsiveAppBar() {
                   </Typography>
                 </MenuItem>
               )}
+              {user && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography
+                    component={Link}
+                    to="/all"
+                    sx={{ textAlign: 'center' }}
+                  >
+                    All Posts
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <Box
@@ -222,6 +233,21 @@ export default function ResponsiveAppBar() {
                 </Button>
               </Link>
             )}
+            {user && (
+              <Link to="/all">
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    fontSize: '1.3rem',
+                  }}
+                >
+                  All Posts
+                </Button>
+              </Link>
+            )}
             {!user && (
               <Link to="/register">
                 <Button
@@ -238,6 +264,37 @@ export default function ResponsiveAppBar() {
               </Link>
             )}
           </Box>
+          <TextField
+            label="Search"
+            variant="standard"
+            sx={{
+              marginRight: '2rem',
+              input: {
+                color: 'white',
+              },
+              label: {
+                color: 'white',
+                '&.Mui-focused': {
+                  color: '#73B65F',
+                },
+              },
+              '& .MuiInput-underline:before': {
+                borderBottomColor: 'white',
+              },
+              '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+                borderBottomColor: 'white',
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: '#73B65F',
+              },
+            }}
+            value={search}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setSearch(newValue);
+              navigate(`/?search=${newValue}`);
+            }}
+          />
           {user && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
@@ -278,37 +335,6 @@ export default function ResponsiveAppBar() {
               </Menu>
             </Box>
           )}
-          <TextField
-            label="Search"
-            variant="standard"
-            sx={{
-              input: {
-                color: 'white',
-              },
-              label: {
-                color: 'white',
-                '&.Mui-focused': {
-                  color: '#73B65F',
-                },
-              },
-              '& .MuiInput-underline:before': {
-                borderBottomColor: 'white',
-              },
-              '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-                borderBottomColor: 'white',
-              },
-              '& .MuiInput-underline:after': {
-                borderBottomColor: '#73B65F',
-              },
-            }}
-            value={search}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              setSearch(newValue);
-
-              navigate(`/?search=${newValue}`);
-            }}
-          />
         </Toolbar>
       </Container>
     </AppBar>

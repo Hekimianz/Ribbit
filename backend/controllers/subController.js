@@ -135,3 +135,21 @@ exports.unsubscribeFromSub = async (req, res) => {
     res.status(500).json({ error: 'Failed to unsubscribe' });
   }
 };
+
+exports.getSubscriptions = async (req, res) => {
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      subscribedSubs: true,
+    },
+  });
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  const subscribedSubNames = user.subscribedSubs.map((sub) => sub.name);
+  res.send(subscribedSubNames);
+};

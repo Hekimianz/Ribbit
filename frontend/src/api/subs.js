@@ -23,3 +23,53 @@ export const getSub = async (name, page = 1, limit = 10) => {
     console.error('Error fetching sub data: ', error);
   }
 };
+
+export const subscribeToSub = async (subribbitName) => {
+  try {
+    const response = await fetch(`${base_url}/subs/subscribe`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ subribbitName }),
+    });
+    const data = await response.json();
+    if (response.ok) return data;
+    return null;
+  } catch (error) {
+    console.error('Error subscribing to sub: ', error);
+  }
+};
+
+export const unsubscribeFromSub = async (subribbitName) => {
+  try {
+    const response = await fetch(`${base_url}/subs/unsubscribe`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ subribbitName }),
+    });
+    const data = await response.json();
+    if (response.ok) return data;
+    return null;
+  } catch (error) {
+    console.error('Error unsubscribing to sub: ', error);
+  }
+};
+
+export const getSubscriptions = async () => {
+  try {
+    const response = await fetch(`${base_url}/subs/subscriptions`, {
+      credentials: 'include',
+      method: 'GET',
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error getting list of subscriptions: ', error);
+  }
+};

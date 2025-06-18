@@ -13,6 +13,7 @@ import Layout from './components/Layout';
 import Post from './pages/Post/Post';
 import User from './pages/User/User';
 import NewPost from './pages/NewPost/NewPost';
+import AllPosts from './pages/AllPosts/AllPosts';
 createRoot(document.getElementById('root')).render(
   <ThemeProvider theme={theme}>
     <AuthProvider>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/all" element={<AllPosts />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/user/:name" element={<User />} />
