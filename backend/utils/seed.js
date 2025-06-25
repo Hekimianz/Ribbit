@@ -15,11 +15,15 @@ async function seed() {
 
   const userCount = 10;
   const users = [];
+
   for (let i = 0; i < userCount; i++) {
+    const username =
+      faker.person.firstName().toLowerCase() +
+      faker.number.int({ min: 1, max: 999 });
     users.push(
       await prisma.user.create({
         data: {
-          username: faker.internet.userName().toLowerCase(),
+          username,
           password: 'monkey',
         },
       })
@@ -36,6 +40,7 @@ async function seed() {
   ];
 
   const subribbits = [];
+
   for (let i = 0; i < subNames.length; i++) {
     subribbits.push(
       await prisma.subribbit.create({
@@ -47,7 +52,7 @@ async function seed() {
     );
   }
 
-  // 🔁 Subscribe each user to 1–3 subribbits
+  // Subscribe each user to 1–3 subribbits
   for (const user of users) {
     const numSubscriptions = faker.number.int({ min: 1, max: 3 });
     const subsToSubscribe = faker.helpers.arrayElements(
@@ -65,24 +70,50 @@ async function seed() {
     });
   }
 
+  const realisticTitles = [
+    'Why I Switched from React to Svelte',
+    '10 JavaScript Tricks You Should Know',
+    'What It’s Really Like Working at a FAANG Company',
+    'CSS Grid vs Flexbox: When to Use Which',
+    'The Meme That Perfectly Describes Debugging',
+    'Frontend Devs Be Like...',
+    'How I Landed My First Dev Job with No Degree',
+    'Dark Mode Is Not Just Aesthetic: Here’s Why',
+    'This UI Pattern Needs to Die',
+    'Interviewed at Google and Here’s What Happened',
+  ];
+
+  const realisticBodies = [
+    'After working with React for 3 years, I finally gave Svelte a shot — and honestly, I’m not going back anytime soon.',
+    'You might’ve been using `Array.map` wrong this whole time. Here’s how to really leverage it.',
+    'Honestly, I think we as developers overcomplicate things. Sometimes plain CSS is all you need.',
+    'This happened during a live demo in front of my manager. Spoiler: it blue-screened.',
+    'This meme is the reason I failed a stand-up. I couldn’t stop laughing.',
+    'If you’re struggling to learn JavaScript, here’s the roadmap that finally worked for me.',
+    'Honestly, the coding bootcamp was great, but the real learning happened on the job.',
+    'Why do we keep designing mobile navs like it’s still 2010?',
+    'Dark patterns in UI design are not just unethical — they cost you users.',
+    'Imposter syndrome is real. Here’s how I deal with it as a junior dev.',
+  ];
+
+  const mockImages = [
+    'https://i.imgur.com/FJQJlps.jpeg',
+    'https://i.imgur.com/uDPl0K2.jpeg',
+    'https://i.imgur.com/2FcQWz8.jpeg',
+    'https://i.imgur.com/jxUfxhS.png',
+  ];
+
   const posts = [];
+
   for (let i = 0; i < 100; i++) {
     const author = faker.helpers.arrayElement(users);
     const sub = faker.helpers.arrayElement(subribbits);
+    const title = faker.helpers.arrayElement(realisticTitles);
+    const textContent = faker.helpers.arrayElement(realisticBodies);
 
-    let textContent = faker.lorem.sentences(
-      faker.number.int({ min: 1, max: 3 })
-    );
     let image = null;
-
     if (sub.name === 'memes' || sub.name === 'frontend') {
       if (faker.datatype.boolean()) {
-        const mockImages = [
-          'https://i.imgur.com/FJQJlps.jpeg',
-          'https://i.imgur.com/uDPl0K2.jpeg',
-          'https://i.imgur.com/2FcQWz8.jpeg',
-          'https://i.imgur.com/jxUfxhS.png',
-        ];
         image = faker.helpers.arrayElement(mockImages);
       }
     } else {
@@ -96,7 +127,7 @@ async function seed() {
     posts.push(
       await prisma.post.create({
         data: {
-          title: faker.lorem.sentence(),
+          title,
           textContent,
           image,
           authorId: author.id,
@@ -108,21 +139,22 @@ async function seed() {
   }
 
   const commentSamples = [
-    'Great post!',
-    'Totally agree with you.',
-    'This made my day 😂',
-    'Could you share more on this?',
-    'I had the same experience.',
-    'Thanks for the tips!',
-    'Not sure I agree, but interesting take.',
-    'This was super helpful, thanks!',
-    'LOL this is so true!',
-    'Nice write-up.',
+    'This helped clarify a lot. Thanks!',
+    'Been there. Debugging sucks sometimes.',
+    '🔥🔥🔥',
+    'I respectfully disagree, here’s why...',
+    'This is gold. Bookmarking for later.',
+    'Can confirm — this happened to me too.',
+    'How would you handle this in Vue?',
+    'Dude. That meme is way too real.',
+    'Props to you for breaking it down simply.',
+    'We need more posts like this.',
   ];
 
   for (const post of posts) {
     const numComments = faker.number.int({ min: 0, max: 5 });
     const postAuthorId = post.authorId;
+
     for (let i = 0; i < numComments; i++) {
       let commenter;
       do {
@@ -140,7 +172,7 @@ async function seed() {
     }
   }
 
-  console.log('Database seeded.');
+  console.log('Database seeded with realistic content.');
   await prisma.$disconnect();
 }
 
