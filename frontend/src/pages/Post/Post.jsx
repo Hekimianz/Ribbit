@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { getPost, deletePost, vote as postVote } from '../../api/posts';
 import { createComment, vote } from '../../api/comments';
-import { Stack, Button, Backdrop } from '@mui/material';
+import { Stack, Button, Backdrop, Skeleton } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../../context/authContext';
 import Comment from '../../components/Comment/Comment';
@@ -15,6 +15,8 @@ export default function Post() {
   const [commentText, setCommentText] = useState('');
   const [invalid, setInvalid] = useState(true);
   const [confDelete, setConfDelete] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,7 +100,9 @@ export default function Post() {
   return (
     <Stack className={styles.wrapper} direction="column" spacing={2}>
       <h1>{post.title}</h1>
-      {post.image && <img src={post.image} />}
+      {/* {post.image && <img src={post.image} />} */}
+      {post.image && !imgLoaded && <Skeleton width={600} height={400} />}
+      {post.image && <img src={post.image} onLoad={() => setImgLoaded(true)} />}
       {post.textContent && (
         <p className={styles.textContent}>{post.textContent}</p>
       )}

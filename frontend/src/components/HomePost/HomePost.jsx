@@ -1,4 +1,5 @@
-import { Stack } from '@mui/material';
+import { useState } from 'react';
+import { Stack, Skeleton } from '@mui/material';
 import { Link, useNavigate } from 'react-router';
 import { formatDistanceToNow } from 'date-fns';
 import styles from './HomePost.module.css';
@@ -15,6 +16,7 @@ export default function HomePost({
   onVote,
 }) {
   const { user } = useAuth();
+  const [imgLoaded, setImgLoaded] = useState(false);
   const navigate = useNavigate();
   const formattedDate = formatDistanceToNow(new Date(date), {
     addSuffix: true,
@@ -41,7 +43,27 @@ export default function HomePost({
         }}
       >
         {img ? (
-          <img className={styles.thumbnail} alt="thumbnail" src={img} />
+          <div className={styles.thumbnailWrapper}>
+            {!imgLoaded && (
+              <Skeleton
+                variant="rectangular"
+                width={70}
+                height={70}
+                sx={{
+                  borderRadius: '4px',
+                  margin: '1rem',
+                }}
+              />
+            )}
+            <img
+              className={`${styles.thumbnail} ${
+                imgLoaded ? styles.loaded : ''
+              }`}
+              alt="thumbnail"
+              src={img}
+              onLoad={() => setImgLoaded(true)}
+            />
+          </div>
         ) : (
           <div className={styles.thumbnail}></div>
         )}

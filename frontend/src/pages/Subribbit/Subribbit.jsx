@@ -30,7 +30,8 @@ export default function Subribbit() {
     fetchData();
   }, [name, page]);
 
-  const isSubscribed = sub.name && subscriptions.includes(sub.name);
+  const isSubscribed =
+    sub.name && subscriptions.length && subscriptions.includes(sub.name);
 
   const totalPages = Math.ceil(totalCount / 10);
   return (

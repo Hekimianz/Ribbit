@@ -23,6 +23,12 @@
   height: 70px;
   border-radius: 4px;
   margin: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.thumbnail.loaded {
+  opacity: 1;
 }
 
 #votes {
@@ -47,4 +53,22 @@
 
 .downvote:hover {
   fill: #f53131;
+}
+
+.thumbnailWrapper {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.thumbnail {
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.thumbnail.loaded {
+  opacity: 1;
+  transform: scale(1);
 }
